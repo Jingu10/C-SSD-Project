@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d4c27e32-ce8d-4e92-9e90-c0be33aca9e0}</ProjectGuid>
-    <RootNamespace>SSD</RootNamespace>
+    <ProjectGuid>{6abe9286-2f25-4982-98f5-336387507289}</ProjectGuid>
+    <RootNamespace>Shell</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
