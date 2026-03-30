@@ -171,6 +171,7 @@ int main() {
 					string VALUE;
 					getline(ss, VALUE, ' ');
 					if (isValidVALUE(VALUE)) {
+						commandLine.replace(commandLine.find("write"), 5, "W");
 						std::cout << sendCommandLineToSSD(commandLine);
 					}
 					else {
@@ -185,6 +186,7 @@ int main() {
 				string LBA;
 				getline(ss, LBA, ' ');
 				if (isValidLBA(LBA)) {
+					commandLine.replace(commandLine.find("read"), 4, "R");
 					std::cout << sendCommandLineToSSD(commandLine);
 				} 
 				else {
