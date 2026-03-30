@@ -3,6 +3,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Shell/Shell.vcxproj" />
-  <Project Path="SSD/SSD.vcxproj" />
+  <Project Path="Shell/Shell.vcxproj" Id="6abe9286-2f25-4982-98f5-336387507289" />
+  <Project Path="SSD/SSD.vcxproj" Id="d4c27e32-ce8d-4e92-9e90-c0be33aca9e0" />
 </Solution>
