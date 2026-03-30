@@ -126,12 +126,15 @@ bool isValidNo_TestName(string& No_TestName) {
 	return true; 
 }
 
+boost::asio::io_context io;
+tcp::socket ssd_socket(io);
+
 string sendCommandLineToSSD(string& commandLine) {
 
-	boost::asio::write(socket, boost::asio::buffer(commandLine + '\n'));
+	boost::asio::write(ssd_socket, boost::asio::buffer(commandLine + '\n'));
 
 	boost::asio::streambuf buffer;;
-	boost::asio::read_until(socket, buffer, '\n');
+	boost::asio::read_until(ssd_socket, buffer, '\n');
 
 	std::string reply(
 		boost::asio::buffers_begin(buffer.data()),
@@ -143,12 +146,8 @@ string sendCommandLineToSSD(string& commandLine) {
 
 void connectToSSD()
 {
-	boost::asio::io_context io;
-
-	tcp::socket socket(io);
-	socket.connect(tcp::endpoint(
+	ssd_socket.connect(tcp::endpoint(
 		boost::asio::ip::make_address("127.0.0.1"), 12345));
-
 }
 
 int main() {
