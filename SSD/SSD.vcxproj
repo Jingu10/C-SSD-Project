@@ -130,7 +130,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CommandHandler.cpp" />
+    <ClCompile Include="CommandParser.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ReadCommand.cpp" />
+    <ClCompile Include="ShellSession.cpp" />
+    <ClCompile Include="SSDMemory.cpp" />
+    <ClCompile Include="SSDServer.cpp" />
+    <ClCompile Include="WriteCommand.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CommandHandler.h" />
+    <ClInclude Include="CommandParser.h" />
+    <ClInclude Include="ICommand.h" />
+    <ClInclude Include="ReadCommand.h" />
+    <ClInclude Include="ShellSession.h" />
+    <ClInclude Include="SSDMemory.h" />
+    <ClInclude Include="SSDServer.h" />
+    <ClInclude Include="WriteCommand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
