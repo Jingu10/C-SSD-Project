@@ -75,35 +75,135 @@ void Shell::test(const string& fileName) {
     bool pass = true;
 
     while (getline(file, line)) {
-        
-        if (!v.isValidLineInTestFile(line))
-        {
-            pass = false;
-            break;
-        }
 
         istringstream ss(line);
         string command, LBA, VALUE, expected;
         ss >> command;
 
         if (command == "write") {
-            ss >> LBA >> VALUE >> expected;
-            if (write(LBA, VALUE) != expected) pass = false;
+            ss >> LBA; // write 다음 토큰은 무조건 존재함.
+            if (LBA == "INVALID") continue; // invalid 한 format 이 맞기 때문에 다음 테스트 수행 하면 됨. 
+            
+            ss >> VALUE; // 위에서 안걸렸으면 무조건 존재
+            if (VALUE == "INVALID") continue;
+
+            ss >> expected; // 이게 SUCCESS, ERROR, INVALID 가 아닐 수도 있음. (아니라면 무조건 INVALID FORMAT 인것임)
+
+            if (expected == "INVALID") // 여기서 INVALID 는 절대 나올 수 없음
+            {
+                pass = false;
+                break;
+            }
+
+            if (expected != "SUCCESS" && expected != "ERROR") // 숫자가 오는 경우
+            {
+                string s = "NONE";
+                while (getline(ss, s, ' '))
+                {
+                    if (s == "INVALID")
+                    {
+                        break;
+                    }
+                }
+                if (s == "INVALID") continue;
+                else {
+                    pass = false;
+                    break;
+                }
+            }
+            else
+            {
+                if (write(LBA, VALUE) != expected) pass = false;
+            }
         }
         else if (command == "read") {
-            ss >> LBA >> expected;
-            if (read(LBA) != expected) pass = false;
+            ss >> LBA; // read 다음 토큰은 무조건 존재함.
+            if (LBA == "INVALID") continue; // invalid 한 format 이 맞기 때문에 다음 테스트 수행 하면 됨. 
+
+            ss >> expected; // 위에서 안걸렸으면 무조건 존재
+
+            if (expected == "INVALID") // 여기서 INVALID 는 절대 나올 수 없음
+            {
+                pass = false;
+                break;
+            }
+
+            string left;
+            if (ss >> left) // 토큰이 더 남아있는 경우 Invalid Format 이 나와야 함. 
+            {
+                if (left == "INVALID") continue;
+                string s = "NONE";
+                while (getline(ss, s, ' '))
+                {
+                    if (s == "INVALID")
+                    {
+                        break;
+                    }
+                }
+                if (s == "INVALID") continue;
+                else {
+                    pass = false;
+                    break;
+                }
+            }
+            else
+            {
+                if (read(LBA) != expected) pass = false;
+            }
         }
         else if (command == "fullwrite")
         {
-            ss >> VALUE >> expected;
-            if (fullWrite(VALUE) != expected) pass = false;
+            ss >> VALUE; // fullwrite 다음 토큰은 무조건 존재함.
+            if (VALUE == "INVALID") continue; // invalid 한 format 이 맞기 때문에 다음 테스트 수행 하면 됨. 
+
+            ss >> expected; // 위에서 안걸렸으면 무조건 존재
+
+            if (expected == "INVALID") // 여기서 INVALID 는 절대 나올 수 없음
+            {
+                pass = false;
+                break;
+            }
+
+            if (expected != "SUCCESS" && expected != "ERROR") // 반드시 INVALID 가 와야 함
+            {
+                string s = "NONE";
+                while (getline(ss, s, ' '))
+                {
+                    if (s == "INVALID")
+                    {
+                        break;
+                    }
+                }
+                if (s == "INVALID") continue;
+                else {
+                    pass = false;
+                    break;
+                }
+            }
+            else
+            {
+                if (fullWrite(VALUE) != expected) pass = false;
+            }
+        } 
+        else {
+            // 유효한 커맨드가 아니라면 INVALID FORMAT 이 무조건 있어야 함. (그렇다면 맞는 테스트 인 것)
+            string s;
+            while (getline(ss, s, ' '))
+            {
+                if (s == "INVALID")
+                {
+                    break;
+                }
+            }
+            if (s != "INVALID") pass = false; // 모든 토큰을 확인했는데 INVALID 가 없다. 그럼 테스트 실패. 
         }
         if (!pass) break;
     }
 
     if (pass) om.print("[PASS] " + fileName);
     else om.print("[FAIL] " + fileName);
+
+    std::cout << line << "\n";
 }
 
 void Shell::testAll() {

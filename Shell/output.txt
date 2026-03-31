@@ -13,3 +13,61 @@ INVALID COMMAND
 shell> test 1_BoundaryLBAReadWrite
 [FAIL] 1_BoundaryLBAReadWrite
 shell> help
+shell> help
+Team Name : Super men
+
+Team Member  : Jingu Yeo, Sangun Heo
+
+How to use each command
+
+write <LBA> <VALUE> : Write Value on Logical Block Address with LBA number.
+read <LBA> : Read Value from LBA with LBA number.
+help : Show how to use each command.
+fullwrite <VALUE> : Write Value on All LBA (0 ~ 99).
+fullread <VALUE> : Read Value from all LBA.
+test <No_TestName> : Test command lines on test script named No_TestName.
+testall : Test All test scripts.
+shell> test
+INVALID COMMAND
+shell> read 0
+0x00000000
+shell> write 0 0x12345678
+SUCCESS
+shell> read 0 0x12345678
+INVALID COMMAND
+shell> test 1_BoundaryLBAReadWrite
+[PASS] 1_BoundaryLBAReadWrite
+shell> test 2_OutOfRangeLBAReject
+[FAIL] 2_OutOfRangeLBAReject
+shell> test 3_InvalidValueFormatReject
+[FAIL] 3_InvalidValueFormatReject
+shell> test 4_UnwrittenLBAReadZero
+[PASS] 4_UnwrittenLBAReadZero
+shell> test 5_OverwriteLastValueWins
+[PASS] 5_OverwriteLastValueWins
+shell> test 6_IsolationBetweenLBAs
+[PASS] 6_IsolationBetweenLBAs
+shell> test 7_FullWriteThenSparseVerify
+[PASS] 7_FullWriteThenSparseVerify
+shell> test 8_FullWriteOverwriteRegression
+[PASS] 8_FullWriteOverwriteRegression
+shell> test 9_MixedValidAndInvalidSequence
+[FAIL] 9_MixedValidAndInvalidSequence
+shell> test 10_InvalidCommandAndRecovery
+Fail to connect.
+
+shell> test 1_BoundaryLBAReadWrite
+[PASS] 1_BoundaryLBAReadWrite
+shell> test 2_OutOfRangeLBAReject
+[FAIL] 2_OutOfRangeLBAReject
+shell> write -1 0x12345678
+shell> test
+INVALID COMMAND
+shell> test 1_BoundaryLBAReadWrite
+shell> test
+INVALID COMMAND
+shell> test 1_BoundaryLBAReadWrite
+[FAIL] 1_BoundaryLBAReadWrite
+shell> test 2_OutOfRangeLBAReject
+shell> test 1_BoundaryLBAReadWrite
+shell> test 1_BoundaryLBAReadWrite

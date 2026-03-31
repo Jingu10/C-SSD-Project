@@ -124,8 +124,6 @@ bool Validator::isValidLineInTestFile(const std::string& line) {
 
     ss >> command;
 
-    if (command != "read" && command != "write" && command != "fullwrite") return false;
-
     if (command == "write") {
         if (!(ss >> LBA)) return false;
         if (!(ss >> VALUE)) return false;
