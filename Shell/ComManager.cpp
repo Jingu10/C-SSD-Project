@@ -13,7 +13,7 @@ bool ComManager::connectToSSD() {
 	}
 	catch (std::exception e) {
 		OutputManager om;
-		om.print(e.what());
+		om.print("Fail to connect.\n");
 		return false;
 	}
 }
