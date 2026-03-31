@@ -37,10 +37,7 @@ void ShellSession::run() {
 
             // 핸들러 호출
             std::string response = _handler->handle(request);
-
-            // 출력
-            std::cout << response;
-
+            
             // 응답
             boost::asio::write(_socket, boost::asio::buffer(response));
         }
