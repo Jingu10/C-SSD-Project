@@ -5,130 +5,14 @@
 #include <fstream>
 #include <boost/asio.hpp> // tcp 용
 #include "ComManager.h"
+#include "Validator.h"
 
 using namespace std;
-
-// 잘못된 명령어 입력 및 인자 갯수 검증
-// Fail 시 SSD에게 명령어 미전송 및 "INVALID COMMAND" 출력
-// 값 범위 검증은, 이후의 커맨드 검증에서 수행 (커맨드에 따라 에러 출력이 다르기 때문)
-bool isValidFormattingCommandLine(string& commandLine) {
-	istringstream ss(commandLine);
-	string stk;
-	getline(ss, stk, ' ');
-
-	if (stk == "write") {
-		if (getline(ss, stk, ' ')) {
-			if (getline(ss, stk, ' ')) {
-				if (!getline(ss, stk, ' ')) {
-					return true;
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				return false;
-			}
-		}
-		else {
-			return false;
-		}
-	}
-	else if (stk == "read" || stk == "fullwrite" || stk == "test") {
-		if (getline(ss, stk, ' ')) {
-			if (!getline(ss, stk, ' ')) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		else {
-			return false;
-		}
-	}
-	else if (stk == "exit" || stk == "help" || stk == "fullread" || stk == "testall") {
-		if (!getline(ss, stk, ' ')) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	else {
-		return false;
-	}
-}
-
-bool isValidLBA(string LBA) {
-	try {
-		int n = stoi(LBA);
-		if (n >= 0 && n <= 99) return true;
-		else return false;
-	}
-	catch (const invalid_argument& e) {
-		return false;
-	} catch(const out_of_range& e) {
-		return false;
-	}
-
-	return true;
-}
-
-bool isValidVALUE(string& VALUE) {
-
-	if (VALUE.size() != 10) {
-		return false;
-	}
-	if (VALUE[0] != '0') {
-		return false;
-	}
-	if (VALUE[1] != 'x') {
-		return false;
-	}
-	for (int i = 2; i < 10; i++) {
-		if ((VALUE[i] >= '0' && VALUE[i] <= '9') || (VALUE[i] >= 'A' && VALUE[i] <= 'F')) {
-			continue;
-		}
-		else {
-			return false;
-		}
-	}
-
-	return true;
-}
-
-bool isValidNo_TestName(string& No_TestName) {
-
-	if (No_TestName.find("_") == string::npos) {
-		return false;
-	}
-	
-	int idx = No_TestName.find("_");
-	if (idx == 0) return false;
-
-	string num = No_TestName.substr(0, idx);
-
-	try {
-		int n = stoi(num);
-
-		string path = "./ssd_test_scripts/" + No_TestName + ".txt"; // 파일 존재 여부 확인
-		if (!filesystem::exists(path)) return false;
-
-		return true;
-	}
-	catch (const invalid_argument& e) {
-		return false;
-	}
-	catch (const out_of_range& e) {
-		return false;
-	}
-	return true; 
-}
 
 int main() {
 	
 	ComManager cm;
+	Validator v;
 	cm.connectToSSD();
 
 	while (true) {
@@ -136,7 +20,7 @@ int main() {
 		cout << "shell> ";
 		getline(cin, commandLine);
 
-		if (isValidFormattingCommandLine(commandLine)) {
+		if (v.isValidFormattingCommandLine(commandLine)) {
 			istringstream ss(commandLine);
 
 			string command;
@@ -145,10 +29,10 @@ int main() {
 			if (command == "write") {
 				string LBA;
 				getline(ss, LBA, ' ');
-				if (isValidLBA(LBA)) {
+				if (v.isValidLBA(LBA)) {
 					string VALUE;
 					getline(ss, VALUE, ' ');
-					if (isValidVALUE(VALUE)) {
+					if (v.isValidVALUE(VALUE)) {
 						commandLine.replace(commandLine.find("write"), 5, "W");
 						std::cout << cm.sendCommandLineToSSD(commandLine);
 					}
@@ -163,7 +47,7 @@ int main() {
 			else if (command == "read") {
 				string LBA;
 				getline(ss, LBA, ' ');
-				if (isValidLBA(LBA)) {
+				if (v.isValidLBA(LBA)) {
 					commandLine.replace(commandLine.find("read"), 4, "R");
 					std::cout << cm.sendCommandLineToSSD(commandLine);
 				} 
@@ -190,7 +74,7 @@ int main() {
 			else if (command == "fullwrite") {
 				string VALUE;
 				getline(ss, VALUE, ' ');
-				if (isValidLBA(VALUE)) {
+				if (v.isValidLBA(VALUE)) {
 					// fullwrite 수행
 				}
 				else {
@@ -203,7 +87,7 @@ int main() {
 			else if (command == "test") {
 				string No_TestName;
 				getline(ss, No_TestName, ' ');
-				if (isValidNo_TestName(No_TestName)) {
+				if (v.isValidTestFile(No_TestName)) {
 					// 파일 열어서 하나씩 전송. 
 				}
 				else {
@@ -218,7 +102,5 @@ int main() {
 			std::cout << "INVALID COMMAND\n";
 			continue;
 		}
-
-
 	}
 }
