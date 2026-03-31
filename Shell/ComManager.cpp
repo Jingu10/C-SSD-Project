@@ -6,15 +6,15 @@ using boost::asio::ip::tcp;
 
 ComManager::ComManager() : ssd_socket(io) {}
 
-bool ComManager::connectToSSD() {
+void ComManager::connectToSSD() {
 	try {
 		ssd_socket.connect(tcp::endpoint(boost::asio::ip::make_address("127.0.0.1"), 12345));
-		return true;
 	}
 	catch (std::exception e) {
 		OutputManager om;
 		om.print("Fail to connect.\n");
-		return false;
+
+		std::exit(0);
 	}
 }
 

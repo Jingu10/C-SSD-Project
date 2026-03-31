@@ -1,17 +1,12 @@
-﻿#include <sstream>
-#include <iostream>
-#include <stdexcept> // 없어도 작동하는데?
-#include <filesystem>
-#include <fstream>
-#include <boost/asio.hpp> // tcp 용
-#include "ComManager.h"
-#include "Validator.h"
-#include "OutputManager.h"
-
-using namespace std;
+﻿#include "Shell.h"
 
 int main() {
 	
+	Shell shell;
+	shell.run();
+	return 0;
+
+#if 0
 	ComManager cm;
 	Validator v;
 	OutputManager om;
@@ -105,4 +100,5 @@ int main() {
 			continue;
 		}
 	}
+#endif 
 }

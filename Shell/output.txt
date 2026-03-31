@@ -1,0 +1,13 @@
+Fail to connect.
+hiINVALID COMMANDFail to connect.
+test INVALID COMMANDshell> test
+INVALID COMMANDshell> test 1_BoundaryLBAReadWrite
+[FAIL] 1_BoundaryLBAReadWriteFail to connect.
+shell> test
+INVALID COMMAND
+shell> test 1_BoundaryLBAReadWrite
+[FAIL] 1_BoundaryLBAReadWriteshell> 
+INVALID COMMAND
+shell> test
+INVALID COMMAND
+shell> test 1_BoundaryLBAReadWrite

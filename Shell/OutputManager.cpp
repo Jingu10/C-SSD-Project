@@ -11,11 +11,11 @@ OutputManager::~OutputManager() {
 }
 
 void OutputManager::print(const std::string& message) {
-    std::cout << message;
+    std::cout << message << "\n";
 
     if (outFile.is_open()) {
-        outFile << message;
-        outFile.flush();
+        outFile << message << "\n";
+        // outFile.flush();
     }
 }
 

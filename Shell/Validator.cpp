@@ -117,3 +117,33 @@ bool Validator::isValidTestFile(const std::string& fileName) {
     }
     return true;
 }
+
+bool Validator::isValidLineInTestFile(const std::string& line) {
+    std::istringstream ss(line);
+    std::string command, LBA, VALUE, expected;
+
+    ss >> command;
+
+    if (command != "read" && command != "write" && command != "fullwrite") return false;
+
+    if (command == "write") {
+        if (!(ss >> LBA)) return false;
+        if (!(ss >> VALUE)) return false;
+        if (!(ss >> expected)) return false;
+        if (!isValidLBA(LBA)) return false;
+        if (!isValidVALUE(VALUE)) return false;
+        return true;
+    }
+    else if (command == "read") {
+        if (!(ss >> LBA)) return false;
+        if (!(ss >> expected)) return false;
+        if (!isValidLBA(LBA)) return false;
+        return true;
+    }
+    else if (command == "fullwrite") {
+        if (!(ss >> VALUE)) return false;
+        if (!(ss >> expected)) return false;
+        if (!isValidVALUE(VALUE)) return false;
+        return true;
+    }
+}

@@ -7,4 +7,5 @@ public:
 	bool isValidLBA(const std::string& LBA);
 	bool isValidVALUE(const std::string& VALUE);
 	bool isValidTestFile(const std::string& fileName);
+	bool isValidLineInTestFile(const std::string& line);
 };
