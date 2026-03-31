@@ -1,0 +1,6 @@
+shell> hello
+INVALID COMMAND
+shell> read 0
+00000000
+shell> read 0
+00000000
