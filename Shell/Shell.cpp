@@ -1,9 +1,10 @@
-#include "Shell.h"
+﻿#include "Shell.h"
 #include "Validator.h"
 #include <sstream>
 #include <vector>
 #include <map>
 #include <filesystem>
+#include <regex>
 
 using namespace std;
 
@@ -206,8 +207,37 @@ void Shell::test(const string& fileName) {
     std::cout << line << "\n";
 }
 
-void Shell::testAll() {
+int Shell::extract_number(const std::string& filename) {
+    std::smatch match;
+    std::regex re(R"(^(\d+)_.*\.txt$)");
+    if (std::regex_match(filename, match, re)) {
+        return std::stoi(match[1].str());
+    }
+    return 0;
+}
 
+void Shell::testAll() {
+    namespace fs = std::filesystem;
+    std::vector<fs::path> testFiles;
+
+    // ssd_test_scripts 폴더 내 .txt 파일 수집
+    for (const auto& entry : fs::directory_iterator("./ssd_test_scripts")) {
+        if (entry.path().extension() == ".txt") {
+            int num = extract_number(entry.path().filename().string());
+            if (num > 0) testFiles.push_back(entry.path()); // 숫자 없는 파일 제외
+        }
+    }
+
+    // 숫자 기반 오름차순 정렬
+    std::sort(testFiles.begin(), testFiles.end(), [this](const fs::path& a, const fs::path& b) {
+        return extract_number(a.filename().string()) < extract_number(b.filename().string());
+        });
+
+    // 순차적 실행
+    for (const auto& file_path : testFiles) {
+        std::string fileName = file_path.stem().string(); // "1_test"
+        test(fileName); // 기존 Shell::test() 활용
+    }
 }
 
 void Shell::run() {

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ComManager.h"
 #include "OutputManager.h"
 #include "Validator.h"
@@ -16,6 +16,7 @@ private:
     std::string fullWrite(const std::string& VALUE);
     void fullRead();
     void test(const std::string& fileName);
+    int extract_number(const std::string& filename);
     void testAll();
     void help();
 };
