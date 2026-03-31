@@ -13,6 +13,7 @@ public:
     
     SSDMemory();
     void loadFromFile(const std::string& filename);
+    void saveToFile(const std::string& filename) const;
 
     uint32_t read(size_t addr) const;
     void write(size_t addr, uint32_t value);

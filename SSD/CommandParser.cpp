@@ -3,16 +3,20 @@
 #include <cstdint>
 #include <sstream>
 #include <exception>
+#include <regex>
 #include "CommandParser.h"
 #include "ICommand.h"
 #include "ReadCommand.h"
 #include "WriteCommand.h"
+#include "SSDMemory.h"
+#include <stdexcept>
 
 CommandParser::CommandParser() {}
 
 std::unique_ptr<ICommand> CommandParser::parse(const std::string& request) const {
+    // 입력 없음
     if (request.empty()) {
-        // 입력 없음
+        throw std::exception("Empty Request");
     }
     
     std::istringstream iss(request);
@@ -34,14 +38,26 @@ std::unique_ptr<ICommand> CommandParser::parse(const std::string& request) const
             throw std::exception("Invalid format");
 
         // 주소 범위 검사
-        if (addr < 0 || addr > 99)
+        if (addr < 0 || addr >= SSDMemory::SIZE)
             throw std::exception("주소 범위 초과");
+
+        // value 정규식 검사
+        static const std::regex pattern("^0x[0-9A-F]{8}$");
+        if (!std::regex_match(valueStr, pattern)) {
+            throw std::exception("Invalid VALUE format");
+        }
 
         // 16진수 문자열 -> uint32_t
         uint32_t value = 0;
-        std::stringstream ss;
-        ss << std::hex << valueStr;
-        ss >> value;
+        try {
+            value = std::stoul(valueStr, nullptr, 16);
+        }
+        catch (const std::invalid_argument&) {
+            throw std::exception("Invalid VALUE format");
+        }
+        catch (const std::out_of_range&) {
+            throw std::exception("VALUE out of range");
+        }
 
         return std::make_unique<WriteCommand>(addr, value);
     }
@@ -58,7 +74,7 @@ std::unique_ptr<ICommand> CommandParser::parse(const std::string& request) const
             throw std::exception("Invalid format");
 
         // 주소 범위 검사
-        if (addr < 0 || addr > 99)
+        if (addr < 0 || addr >= SSDMemory::SIZE)
             throw std::exception("주소 범위 초과");
 
         return std::make_unique<ReadCommand>(addr);
