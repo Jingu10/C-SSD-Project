@@ -132,10 +132,12 @@
   <ItemGroup>
     <ClCompile Include="ComManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OutputManager.cpp" />
     <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ComManager.h" />
+    <ClInclude Include="OutputManager.h" />
     <ClInclude Include="Validator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
