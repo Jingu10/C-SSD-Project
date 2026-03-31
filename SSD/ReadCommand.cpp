@@ -11,8 +11,8 @@ ReadCommand::ReadCommand(int addr) : _addr(addr) {}
 std::string ReadCommand::execute(CommandHandler& handler) {
     uint32_t value = handler.read(_addr);
     std::stringstream ss;
-    ss << std::hex << std::uppercase << std::setw(8) << std::setfill('0') << value;
-    return ss.str() + "\n";
+    ss << std::uppercase << std::hex << std::setw(8) << std::setfill('0') << value;
+    return "0x" + ss.str() + "\n";
 }
 
 
