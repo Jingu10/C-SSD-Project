@@ -12,9 +12,9 @@ Shell::Shell() {
 }
 
 void Shell::help() {
-    om.print("팀이름 : 나중에\n");
-    om.print("팀 원 : 여진구, 허상운\n");
-    om.print("각 명령어 사용 법\n");
+    om.print("Team Name : Super men");
+    om.print("Team Member  : Jingu Yeo, Sangun Heo");
+    om.print("How to use each command");
 
     om.print("write <LBA> <VALUE> : Write Value on Logical Block Address with LBA number.");
     om.print("read <LBA> : Read Value from LBA with LBA number.");

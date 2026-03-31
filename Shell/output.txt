@@ -11,3 +11,5 @@ INVALID COMMAND
 shell> test
 INVALID COMMAND
 shell> test 1_BoundaryLBAReadWrite
+[FAIL] 1_BoundaryLBAReadWrite
+shell> help

@@ -27,7 +27,7 @@ std::string ComManager::sendCommandLineToSSD(const std::string& commandLine) {
 
 	std::string reply(
 		boost::asio::buffers_begin(buffer.data()),
-		boost::asio::buffers_end(buffer.data())
+		boost::asio::buffers_end(buffer.data()) - 1
 	);
 
 	return reply;
