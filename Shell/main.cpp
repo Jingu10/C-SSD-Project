@@ -4,9 +4,9 @@
 #include <filesystem>
 #include <fstream>
 #include <boost/asio.hpp> // tcp 용
+#include "ComManager.h"
 
 using namespace std;
-using boost::asio::ip::tcp;
 
 // 잘못된 명령어 입력 및 인자 갯수 검증
 // Fail 시 SSD에게 명령어 미전송 및 "INVALID COMMAND" 출력
@@ -126,32 +126,10 @@ bool isValidNo_TestName(string& No_TestName) {
 	return true; 
 }
 
-boost::asio::io_context io;
-tcp::socket ssd_socket(io);
-
-string sendCommandLineToSSD(string& commandLine) {
-
-	boost::asio::write(ssd_socket, boost::asio::buffer(commandLine + '\n'));
-
-	boost::asio::streambuf buffer;;
-	boost::asio::read_until(ssd_socket, buffer, '\n');
-
-	std::string reply(
-		boost::asio::buffers_begin(buffer.data()),
-		boost::asio::buffers_end(buffer.data())
-	);
-
-	return reply;
-}
-
-void connectToSSD()
-{
-	ssd_socket.connect(tcp::endpoint(
-		boost::asio::ip::make_address("127.0.0.1"), 12345));
-}
-
 int main() {
-	connectToSSD();
+	
+	ComManager cm;
+	cm.connectToSSD();
 
 	while (true) {
 		string commandLine;
@@ -172,7 +150,7 @@ int main() {
 					getline(ss, VALUE, ' ');
 					if (isValidVALUE(VALUE)) {
 						commandLine.replace(commandLine.find("write"), 5, "W");
-						std::cout << sendCommandLineToSSD(commandLine);
+						std::cout << cm.sendCommandLineToSSD(commandLine);
 					}
 					else {
 						std::cout << "ERROR\n";
@@ -187,7 +165,7 @@ int main() {
 				getline(ss, LBA, ' ');
 				if (isValidLBA(LBA)) {
 					commandLine.replace(commandLine.find("read"), 4, "R");
-					std::cout << sendCommandLineToSSD(commandLine);
+					std::cout << cm.sendCommandLineToSSD(commandLine);
 				} 
 				else {
 					std::cout << "ERROR\n";
