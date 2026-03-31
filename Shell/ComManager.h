@@ -6,6 +6,6 @@ class ComManager {
     boost::asio::ip::tcp::socket ssd_socket;
 public:
     ComManager();
-    void connectToSSD();
+    bool connectToSSD();
     std::string sendCommandLineToSSD(const std::string& commandLine);
 };

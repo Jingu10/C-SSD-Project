@@ -15,7 +15,7 @@ int main() {
 	ComManager cm;
 	Validator v;
 	OutputManager om;
-	cm.connectToSSD();
+	if (!cm.connectToSSD()) return 0;
 
 	while (true) {
 		string commandLine;
